@@ -1,8 +1,31 @@
 name: GitHub Actions Demo
 run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on: [pull_request]
+on: [ pull_request ]
+permissions:
+  contents: read
+  actions: write
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   main:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [ 18, 20 ]
     steps:
-      - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      - name: "1. Checkout"
+        uses: actions/checkout@v4
+      - name: "2. Setup node"
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - name: "3. Install"
+        run: npm ci
+      - name: "4. Build"
+        run: npm run build
+      - name: "5. Test"
+        run: npm run test
+      - run: echo ${{github.workflow}}, ${{github.ref}}
