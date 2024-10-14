@@ -26,6 +26,8 @@ jobs:
         run: npm ci
       - name: "4. Build"
         run: npm run build
+        env:
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
       - name: "5. Test"
         run: npm run test
       - name: Upload coverage to Codecov
