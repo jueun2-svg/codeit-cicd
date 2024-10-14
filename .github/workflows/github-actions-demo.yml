@@ -17,4 +17,3 @@ jobs:
         run: npm run build
       - name: "5. Test"
         run: npm run test
-#        code 복사(action), node.js, build, test
